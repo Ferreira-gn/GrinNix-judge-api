@@ -12,6 +12,7 @@ Avaliar código com segurança, isolamento e controle de recursos
 
 ## Modelo lógico da execução dos códigos
 
+```
 [Client]
 ↓
 [API Go]
@@ -24,9 +25,10 @@ Avaliar código com segurança, isolamento e controle de recursos
 ↓
 [Response JSON]
 
+```
 ## Estrutura do Projeto
 
-.
+```
 ├── cmd # Entry points da aplicação
 │ └── api
 │ └── main.go # Inicialização da API HTTP
@@ -38,6 +40,7 @@ Avaliar código com segurança, isolamento e controle de recursos
 └── internal # Código interno da aplicação
 └── executor
 └── docker.go # Executor que interage com Docker
+```
 
 | Arquivo                       | Responsabilidades                                                                                                               |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |

@@ -32,8 +32,41 @@ func runHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+type JudgeRequest struct {
+	Code         string              `json:"code"`
+	FunctionName string              `json:"function_name"`
+	TestCases    []executor.TestCase `json:"test_cases"`
+}
+
 func main() {
 	http.HandleFunc("/run", runHandler)
+	
+	
+	http.HandleFunc("/judge", func(w http.ResponseWriter, r *http.Request) {
+		var req JudgeRequest
+		json.NewDecoder(r.Body).Decode(&req)
+
+		results, err := executor.RunJS(req.Code, req.FunctionName, req.TestCases)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		// Calcula resumo
+		passed := 0
+		for _, r := range results {
+			if r.Passed {
+				passed++
+			}
+		}
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"results":    results,
+			"total":      len(results),
+			"passed":     passed,
+			"all_passed": passed == len(results),
+		})
+	})
 
 	log.Println("Server running on :8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

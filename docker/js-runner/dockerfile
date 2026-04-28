@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Usuário não-root
+RUN addgroup -S runner && adduser -S runner -G runner
+
+COPY runner.js .
+COPY run.sh .
+RUN chmod +x run.sh
+
+USER runner
+
+CMD ["sh", "run.sh"]
